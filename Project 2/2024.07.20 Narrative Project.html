@@ -1,0 +1,183 @@
+<!--
+The CSV file at https://flunky.github.io/cars2017.csv contains average data for 2017 automobile manufacturers. 
+
+Create a scatter plot of this data over a 200x200 as follows.
+
+-Plot the Average City MPG horizontally on a logarithmic scale.
+
+-Plot the Average Hightway MPG vertically on a logarithmic scale.
+
+-Set the radius of each circle to 2 plus the number of cylinders for that entry.
+
+-Set the logarithmic scales to base 10, over a domain from 10 to 150.
+
+-Use the .tickValues() method of each axis to set four tick values at 10, 20, 50 and 100.
+
+-Use the .tickFormat() method of each axis to set the ticks to d3.format("~s").
+
+Your output should match the solution output and its DOM. DOM elements that are wrong will be in red, and any 
+missing ones will be shown in red italics parentheses. Once you have everything right, the DOM should appear 
+completely green and you can submit for full credit.  -->
+
+
+<html>
+<script src='https://d3js.org/d3.v5.min.js'></script>
+<style> 
+    rect {
+        fill: lightblue; 
+        stroke: blue;
+        } 
+    
+    #tooltip {
+        opacity: 0;
+        position:absolute;
+        text-align: center;
+        width: 150px;
+        height: 100px;
+        background-color: whitesmoke;
+        color: black;
+        border: 0px;
+        border-radius: 10px;
+        /* display: none;  */
+        
+    }
+
+</style>
+
+<body onload='init()'>  
+<svg class="chart" width=2100 height=1200></svg>
+<div id="sliderbar"></div>
+<div id="tooltip"></div> 
+
+<script>
+let gwidth = 2000 //scale for width of chart in pixels
+let gheight = 1100 //scale for hight of chart in pixels
+let margin = 50;
+let sliderwidth = 300;
+//async function to first call data download before moving to next functions
+async function init() {
+    // const data = await d3.csv('http://localhost:8000/DJA and GDP Cleaned.csv'); //await data load
+    const data = await d3.csv('https://raw.githubusercontent.com/aravni2/CS416-Visual-Narrative-Project/main/DJA%20and%20GDP%20Cleaned.csv'
+    ); //await data load
+    console.log(data)
+    let xs = d3.scaleLinear().domain(d3.extent(data,d=>+d.Year)).range([0,gwidth]);
+    let ys = d3.scaleLinear().domain([0,d3.max(data,d=>+d['DJIA Avg. Adj'])]).range([gheight,0]);
+    console.log(d3.max(data,d=>+d['DJIA Avg. Adj']))
+
+    let y_axis = d3.axisLeft(ys).tickFormat(d3.format("$~s")); //set up y_axis ticks and number format
+    let x_axis = d3.axisBottom(xs)
+        .ticks(50)
+        .tickFormat(d3.format("")); //setup x_axis ticks and number formats
+
+    var tooltip = d3.select("#tooltip"); 
+
+    //bind data load to scatter plots and scale radii to adjusted
+    d3.select('.chart')
+        .append('g').attr("transform","translate("+margin+","+margin+")") //start at canvas
+        .selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx",(d,i)=> xs(+d.Year)) //cx
+        .attr("cy", (d)=> ys(+d['DJIA Avg. Adj'])) //cy
+        .attr("r",4) //need to convert data values of radii from string to integer (otherwise concatenation)
+        .on("mouseover",function(d,i) {
+
+            tooltip.style("opacity",1)
+            .style("left",(d3.event.pageX)+10+"px")
+            .style("top",(d3.event.pageY)+"px")
+            // .html("Dow Jones Industrial Average: <strong>"+d['DJIA Avg. Adj']+"<strong/>\n Change: <strong/><span style='color: green;'>"+d['DJA YoY Growth'] )
+            .html(function() { 
+                if (+d['DJA YoY Growth'] > 0 ) {
+                    console.log(d['DJA YoY Growth'])
+                    return "Dow Jones Industrial Average: <strong>"+d['DJIA Avg. Adj']+"<strong/>\n Change: <strong/><span style='color: green;'>"+d['DJA YoY Growth']+"%" ;
+            } else if (+d['DJA YoY Growth'] < 0 ) {
+                    return "Dow Jones Industrial Average: <strong>"+d['DJIA Avg. Adj']+"<strong/>\n Change: <strong/><span style='color: red;'>"+d['DJA YoY Growth']+"%"  ;
+            } else {
+                    return "Dow Jones Industrial Average: <strong>"+d['DJIA Avg. Adj']+"<strong/>\n Change: <strong/><span style='color: black;'>"+d['DJA YoY Growth']+"%" ;
+            }
+    });
+        d3.select(this).attr("r",8);}
+        )
+      
+        .on("mouseout",function(d){
+            tooltip.style("opacity",0);
+            d3.select(this).attr("r",4);
+        });
+
+
+    
+
+    const line = d3.line()
+        .x(d=>xs(+d.Year))
+        .y(d=>ys(+d['DJIA Avg. Adj']));
+    
+    // Create slider visual 
+    // const slider = d3.sliderBottom()
+    //         .min(d3.min(data,d=>d.Year))
+    //         .max(d3.max(data,d=>d.Year))
+    //         .width(sliderwidth)
+    //         .tickFormat(d3.format(""))
+    //         .ticks(3)
+    //         .default([d3.min(data, d=>d.Year),d3.max(data,d=>d.Year)])
+    //         .fill('green');
+    
+    // slider.on('onchange', val => {
+    //     xs.domain(val);
+    // })
+    
+    // const filterData = data.filter(d=>d.Year >= val[0] && d.Year <=val[1])
+
+
+    // append line path to svg to connect dots
+    d3.select("svg").append("path")
+        .attr("transform","translate("+margin+","+margin+")")
+        .datum(data)
+        .attr("fill","none")
+        .attr("stroke","steelblue")
+        .attr("stroke-width",1)
+        .attr("d", line);
+
+    // finish setting y axis
+    d3.select('svg').append("g")
+        .style("font-size", "16px")
+        .attr("transform","translate("+margin+","+margin+")")
+        .call(y_axis);  //create y axis
+    
+    // create x axis
+    d3.select('svg').append("g")
+        .style("font-size", "14px")
+        .attr("transform","translate("+margin+","+(gheight+margin)+")")
+        .call(x_axis); //create x axis using y axis height to shift downwards
+
+    // change tick color
+    d3.select("svg").selectAll(".tick text").attr("fill", "grey");
+
+    // add horizontal grid lines
+    d3.select("svg").selectAll("yaxis")
+        .data(ys.ticks(7).slice(1))
+        .join("line")
+        .attr("x1",margin)
+        .attr("x2",gwidth+margin)
+        .attr("y1",(d)=>ys(d)+50)
+        .attr("y2",(d)=>ys(d)+50)
+        .attr("stroke","grey")
+        .attr("stroke-width",.5);
+    
+    // // add tooltips
+    // var tooltip = d3.select("tooltip")
+    
+    // // add a circle element
+    // const circle = svg.append("circle")
+    // .attr("r",0)
+    // .attr("fill","steelblue")
+    // .style("stroke", "white")
+    // .attr("opacity",.7)
+    // .style("pointer-events","none");
+
+
+
+}
+</script>
+</body>
+</html>
