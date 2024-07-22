@@ -202,7 +202,7 @@ async function init() {
         .attr("d", line);
     
     
-    
+    // needed multiple if statements to guarantee annotations don't come in piecewise
     // const type = d3.annotationCalloutElbow
     if (index < 51) {
     var annotations = [{
@@ -306,29 +306,8 @@ async function init() {
     dx: -60}]
     }
 
-    // const annotations = [{
-    // note: {
-    //     label: "Bob invests 5000 during the peak of the roaring twenties. Only to lose >70% in the Great depression",
-    //     title: "The Great Depression"
-    // },
-    // //can use x, y directly instead of data
-    // data: { Year: 1929, "DJIA Avg. Adj": 5587},
-    // dy: -60,
-    // dx: 60
-    // },
-    // {
-    // note: {
-    //     label: "Bob invests 5000 during the peak of the roaring twenties. Only to lose >70% in the Great depression",
-    //     title: "The Great Depression"
-    // },
-    // //can use x, y directly instead of data
-    // data: { Year: 1980, "DJIA Avg. Adj": 5587},
-    // dy: -60,
-    // dx: 60
-    // }]
-
     
-
+    // create variables for animations
     const makeAnnotations = d3.annotation()
     .editMode(true)
     //also can set and override in the note.padding property
