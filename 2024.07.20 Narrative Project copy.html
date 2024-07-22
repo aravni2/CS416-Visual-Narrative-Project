@@ -21,6 +21,14 @@
         
     }
 
+    #slider {
+    width: 2000px;
+    }
+    #sliderdiv{
+    padding-left: 40px;
+    }
+
+
 </style>
 
 <body onload='init()'>  
@@ -28,13 +36,13 @@
 <!-- <div id="sliderbar"></div> -->
 <div id="tooltip"></div> 
 <button id="bt1" type="button" onclick="">Click Me!</button>
+<div id="sliderdiv"><input id="slider" type="range" min="1" max="115" step="1" value="1"/></div>
 <!-- <button id="bt1" type="button" onclick="createGraph(dataslice,data,index)">Click Me!</button> -->
 
 <script>
 let gwidth = 2000 //scale for width of chart in pixels
 let gheight = 1100 //scale for hight of chart in pixels
 let margin = 50;
-let sliderwidth = 300;
 var index = 50;
 const type = d3.annotationCalloutElbow;
 //async function to first call data download before moving to next functions
@@ -94,7 +102,7 @@ async function init() {
 
     
     
-    const line = d3.line()
+    var line = d3.line()
         .x(d=>xs(+d.Year))
         .y(d=>ys(+d['DJIA Avg. Adj']));
     
@@ -195,8 +203,7 @@ async function init() {
     
     
     
-    const type = d3.annotationCalloutElbow
-    
+    // const type = d3.annotationCalloutElbow
     if (index < 51) {
     var annotations = [{
     note: {
@@ -208,8 +215,19 @@ async function init() {
     dy: -60,
     dx: 60
     }]
-    } else if (index < 101) {
+    } 
+    if (index < 101 && index > 51) {
     var annotations = [
+    {
+    note: {
+        label: "Bob invests 5000 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
+        title: "The Great Depression"
+    },
+    //can use x, y directly instead of data
+    data: { Year: 1929, "DJIA Avg. Adj": 5587},
+    dy: -60,
+    dx: 60
+    },
     {
     note: {
         label: "Bob invests another 5000 right before the 1987 flash crash. Only to lose another 14% in the following year",
@@ -238,8 +256,45 @@ async function init() {
     dy: -60,
     dx: -60}]
     }
-    else {
+    if (index >100) {
         var annotations = [
+        {
+    note: {
+        label: "Bob invests 5000 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
+        title: "The Great Depression"
+    },
+    //can use x, y directly instead of data
+    data: { Year: 1929, "DJIA Avg. Adj": 5587},
+    dy: -60,
+    dx: 60
+    },
+    {
+    note: {
+        label: "Bob invests another 5000 right before the 1987 flash crash. Only to lose another 14% in the following year",
+        title: "1987 Flash Crash"
+    },
+    //can use x, y directly instead of data
+    data: { Year: 1987, "DJIA Avg. Adj": 6109},
+    dy: -60,
+    dx: -60},
+    {
+    note: {
+        label: "Bob feels computers are the way of the future.\n He invests another $5000 during the .com bubble peak and loses 38% in the next 3 years",
+        title: "The Dot Com Bubble"
+    },
+    //can use x, y directly instead of data
+    data: { Year: 1999, "DJIA Avg. Adj": 19169},
+    dy: 60,
+    dx: -65},
+    {
+    note: {
+        label: "Recovering from his .com loss he invests another $5000 at the peak of the housing bubble",
+        title: "The Housing Crisis"
+    },
+    //can use x, y directly instead of data
+    data: { Year: 2007, "DJIA Avg. Adj": 19370},
+    dy: -60,
+    dx: -60},
     {
     note: {
         label: "Bob feels Covid is over and invests another $5000 at the end of 2021",
@@ -293,6 +348,7 @@ async function init() {
     })
     .annotations(annotations);
 
+
     d3.select("svg")
     .append("g")
     .attr("class", "annotation-group")
@@ -327,21 +383,20 @@ async function init() {
         .attr("stroke","grey")
         .attr("stroke-width",.5);
     
-    // // add tooltips
-    // var tooltip = d3.select("tooltip")
-    
-    // // add a circle element
-    // const circle = svg.append("circle")
-    // .attr("r",0)
-    // .attr("fill","steelblue")
-    // .style("stroke", "white")
-    // .attr("opacity",.7)
-    // .style("pointer-events","none");
+
+
+    // add title axis
+    d3.select(".chart")
+        .append("text")
+        .attr("x", margin+gwidth/2)
+        .attr("y",margin)
+        .style("font-size", "20px")
+        .style("font-weight", "bold")
+        .style("font-family", "sans-serif")
+        .text("Dow Jones Avg by year");
 
     
-
-    
-
+    // add button functionality
     d3.select("#bt1").on("click", (d,i) => {
         index += 50;
         var dataslice = data.slice(0, index);
@@ -351,6 +406,25 @@ async function init() {
 
     })
 
+
+    d3.select("#slider").on("input", function(d,i) {
+        index = this.value;
+        console.log(this.value)
+        console.log(index)
+        // d3.select('.chart').data(dataslice).exit().remove()
+    // xs.domain([0, currentValue * 2])
+        dataslice = data.slice(0, index);
+        console.log(dataslice)
+        d3.select(".annotations").remove();
+        d3.select(".chart").selectAll("circle").remove();
+        // d3.select("path").remove();
+        d3.select("svg").append("path").remove();
+        
+
+        createGraph(dataslice,data,index);
+    })
+
+    // add graph updating
     function updateGraph(newdata,data,index) {
         var dat = d3.select(".chart")
         .data(dataslice);
@@ -362,7 +436,9 @@ async function init() {
 
     }
 
-    createGraph(dataslice,data,index)
+    // d3.select("svg").select(".chart").remove()
+    
+    createGraph(dataslice,data,index);
 }
 </script>
 
