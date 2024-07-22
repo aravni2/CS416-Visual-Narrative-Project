@@ -35,7 +35,7 @@ let gwidth = 2000 //scale for width of chart in pixels
 let gheight = 1100 //scale for hight of chart in pixels
 let margin = 50;
 let sliderwidth = 300;
-var index = 0;
+var index = 50;
 const type = d3.annotationCalloutElbow;
 //async function to first call data download before moving to next functions
 async function init() {
@@ -53,7 +53,8 @@ async function init() {
         .tickFormat(d3.format("")); //setup x_axis ticks and number formats
 
     var tooltip = d3.select("#tooltip"); 
-    var dataslice = data.slice(0,index+50)
+    var dataslice = data.slice(0,index);
+    console.log(dataslice);
     //bind data load to scatter plots and scale radii to adjusted
 
     function createGraph(dataslice,data,index){
@@ -92,25 +93,184 @@ async function init() {
 
 
     
-
+    
     const line = d3.line()
-
         .x(d=>xs(+d.Year))
         .y(d=>ys(+d['DJIA Avg. Adj']));
     
 
-    const type = d3.annotationCalloutElbow
+    // const type = d3.annotationCalloutElbow
+    // console.log(index);
+    // if (index < 10) {
+    // var annotations = [{
+    // note: {
+    //     label: "Bob invests 5000 during the peak of the roaring twenties. Only to lose >70% in the Great depression",
+    //     title: "The Great Depression"
+    // },
+    // //can use x, y directly instead of data
+    // data: { Year: 1929, "DJIA Avg. Adj": 5587},
+    // dy: -60,
+    // dx: 60
+    // }]
+    // } else if (index <=80) {
+    // var annotations = [{
+    // note: {
+    //     label: "Bob invests 5000 during the peak of the roaring twenties. Only to lose >70% in the Great depression",
+    //     title: "The Great Depression"
+    // },
+    // //can use x, y directly instead of data
+    // data: { Year: 1929, "DJIA Avg. Adj": 5587},
+    // dy: -60,
+    // dx: 60
+    // },
+    // {
+    // note: {
+    //     label: "Bob invests 5000 during the peak of the roaring twenties. Only to lose >70% in the Great depression",
+    //     title: "The Great Depression"
+    // },
+    // //can use x, y directly instead of data
+    // data: { Year: 1980, "DJIA Avg. Adj": 5587},
+    // dy: -60,
+    // dx: 60}]
+    // }
 
-    const annotations = [{
+    // // const annotations = [{
+    // // note: {
+    // //     label: "Bob invests 5000 during the peak of the roaring twenties. Only to lose >70% in the Great depression",
+    // //     title: "The Great Depression"
+    // // },
+    // // //can use x, y directly instead of data
+    // // data: { Year: 1929, "DJIA Avg. Adj": 5587},
+    // // dy: -60,
+    // // dx: 60
+    // // },
+    // // {
+    // // note: {
+    // //     label: "Bob invests 5000 during the peak of the roaring twenties. Only to lose >70% in the Great depression",
+    // //     title: "The Great Depression"
+    // // },
+    // // //can use x, y directly instead of data
+    // // data: { Year: 1980, "DJIA Avg. Adj": 5587},
+    // // dy: -60,
+    // // dx: 60
+    // // }]
+
+    
+
+    // const makeAnnotations = d3.annotation()
+    // .editMode(true)
+    // //also can set and override in the note.padding property
+    // //of the annotation object
+    // .notePadding(15)
+    // .type(type)
+    // //accessors & accessorsInverse not needed
+    // //if using x, y in annotations JSON
+    // // DON'T FORGET MARGINS!!!!
+    // .accessors({
+    //     x: d => xs(d.Year)+50,
+    //     y: d => ys(d['DJIA Avg. Adj'])+50
+    // })
+    // .accessorsInverse({
+    //     Year: d => x.invert(d.x),
+    //     "DJIA Avg. Adj": d => y.invert(d.y)
+    // })
+    // .annotations(annotations);
+
+    // d3.select("svg")
+    // .append("g")
+    // .attr("class", "annotation-group")
+    // .call(makeAnnotations);
+
+
+    // append line path to svg to connect dots
+    d3.select("svg").append("path")
+        .attr("transform","translate("+margin+","+margin+")")
+        .datum(dataslice)
+        .transition()
+        .duration(1000)
+        .attr("fill","none")
+        .attr("stroke","steelblue")
+        .attr("stroke-width",1)
+        .attr("d", line);
+    
+    
+    
+    const type = d3.annotationCalloutElbow
+    
+    if (index < 51) {
+    var annotations = [{
     note: {
-        label: "Longer text to show text wrapping",
-        title: "Annotations :)"
+        label: "Bob invests 5000 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
+        title: "The Great Depression"
     },
     //can use x, y directly instead of data
-    data: { Year: 1952, "DJIA Avg. Adj": 5000},
-    dy: 60,
-    dx: -60
+    data: { Year: 1929, "DJIA Avg. Adj": 5587},
+    dy: -60,
+    dx: 60
     }]
+    } else if (index < 101) {
+    var annotations = [
+    {
+    note: {
+        label: "Bob invests another 5000 right before the 1987 flash crash. Only to lose another 14% in the following year",
+        title: "1987 Flash Crash"
+    },
+    //can use x, y directly instead of data
+    data: { Year: 1987, "DJIA Avg. Adj": 6109},
+    dy: -60,
+    dx: -60},
+    {
+    note: {
+        label: "Bob feels computers are the way of the future.\n He invests another $5000 during the .com bubble peak and loses 38% in the next 3 years",
+        title: "The Dot Com Bubble"
+    },
+    //can use x, y directly instead of data
+    data: { Year: 1999, "DJIA Avg. Adj": 19169},
+    dy: 60,
+    dx: -65},
+    {
+    note: {
+        label: "Recovering from his .com loss he invests another $5000 at the peak of the housing bubble",
+        title: "The Housing Crisis"
+    },
+    //can use x, y directly instead of data
+    data: { Year: 2007, "DJIA Avg. Adj": 19370},
+    dy: -60,
+    dx: -60}]
+    }
+    else {
+        var annotations = [
+    {
+    note: {
+        label: "Bob feels Covid is over and invests another $5000 at the end of 2021",
+        title: "Post-Covid Inflation bubble"
+    },
+    //can use x, y directly instead of data
+    data: { Year: 2021, "DJIA Avg. Adj": 38262},
+    dy: 60,
+    dx: -60}]
+    }
+
+    // const annotations = [{
+    // note: {
+    //     label: "Bob invests 5000 during the peak of the roaring twenties. Only to lose >70% in the Great depression",
+    //     title: "The Great Depression"
+    // },
+    // //can use x, y directly instead of data
+    // data: { Year: 1929, "DJIA Avg. Adj": 5587},
+    // dy: -60,
+    // dx: 60
+    // },
+    // {
+    // note: {
+    //     label: "Bob invests 5000 during the peak of the roaring twenties. Only to lose >70% in the Great depression",
+    //     title: "The Great Depression"
+    // },
+    // //can use x, y directly instead of data
+    // data: { Year: 1980, "DJIA Avg. Adj": 5587},
+    // dy: -60,
+    // dx: 60
+    // }]
 
     
 
@@ -124,8 +284,8 @@ async function init() {
     //if using x, y in annotations JSON
     // DON'T FORGET MARGINS!!!!
     .accessors({
-        x: d => xs(1929)+50,
-        y: d => ys(5200)+50
+        x: d => xs(d.Year)+50,
+        y: d => ys(d['DJIA Avg. Adj'])+50
     })
     .accessorsInverse({
         Year: d => x.invert(d.x),
@@ -138,18 +298,9 @@ async function init() {
     .attr("class", "annotation-group")
     .call(makeAnnotations);
 
+}
 
-    // append line path to svg to connect dots
-    d3.select("svg").append("path")
-        .attr("transform","translate("+margin+","+margin+")")
-        .datum(dataslice)
-        .transition()
-        .duration(1000)
-        .attr("fill","none")
-        .attr("stroke","steelblue")
-        .attr("stroke-width",1)
-        .attr("d", line);
-    }    
+
     // finish setting y axis
     d3.select('svg').append("g")
         .style("font-size", "16px")
@@ -192,9 +343,12 @@ async function init() {
     
 
     d3.select("#bt1").on("click", (d,i) => {
-        index += 40;
+        index += 50;
         var dataslice = data.slice(0, index);
+        console.log(index);
+        console.log(dataslice);
         createGraph(dataslice,data,index);
+
     })
 
     function updateGraph(newdata,data,index) {
@@ -208,7 +362,7 @@ async function init() {
 
     }
 
-    createGraph(dataslice,data)
+    createGraph(dataslice,data,index)
 }
 </script>
 
