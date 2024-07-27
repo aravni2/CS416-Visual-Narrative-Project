@@ -136,10 +136,32 @@ async function init() {
       
     // needed multiple if statements to guarantee annotations don't come in piecewise
     // const type = d3.annotationCalloutElbow
-    if (index >= 15) {
-    var annotations = [{
+    if (index>=0){
+        var annotations = [{
     note: {
-        label: "Bob invests $100 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
+        label: "Although he has no money, he will soon scrape enough together to hit it big",
+        title: "Bob is Born"
+    },
+    //can use x, y directly instead of data
+    data: { Year: 1915, "snp_adj": 250},
+    dy: -60,
+    dx: 60
+    }]};
+    if (index >= 15) {
+    var annotations = [
+    {
+        note: {
+        label: "Although he has no money, he will soon scrape enough together to hit it big",
+        title: "Bob is Born"
+    },
+    //can use x, y directly instead of data
+    data: { Year: 1915, "snp_adj": 250},
+    dy: -60,
+    dx: 60
+    },
+    {
+    note: {
+        label: "Bob invests $250 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
         title: "The Great Depression"
     },
     //can use x, y directly instead of data
@@ -152,7 +174,7 @@ async function init() {
     var annotations = [
     {
     note: {
-        label: "Bob invests $100 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
+        label: "Bob invests $250 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
         title: "The Great Depression"
     },
     //can use x, y directly instead of data
@@ -162,7 +184,7 @@ async function init() {
     },
     {
     note: {
-        label: "Bob invests another 5000 right before the 1987 flash crash. Only to lose another 14% in the following year",
+        label: "Bob invests $5,000 right before the 1987 flash crash. Only to lose another 14% in the following year",
         title: "1987 Flash Crash"
     },
     //can use x, y directly instead of data
@@ -173,7 +195,7 @@ async function init() {
     var annotations = [
     {
     note: {
-        label: "Bob invests $100 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
+        label: "Bob invests $250 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
         title: "The Great Depression"
     },
     //can use x, y directly instead of data
@@ -183,7 +205,7 @@ async function init() {
     },
     {
     note: {
-        label: "Bob invests another 5000 right before the 1987 flash crash. Only to lose another 14% in the following year",
+        label: "Bob invests $5,000 right before the 1987 flash crash. Only to lose another 14% in the following year",
         title: "1987 Flash Crash"
     },
     //can use x, y directly instead of data
@@ -192,7 +214,7 @@ async function init() {
     dx: -60},
     {
     note: {
-        label: "Bob feels computers are the way of the future.\n He invests another $5000 during the .com bubble peak and loses 38% in the next 3 years",
+        label: "Bob feels computers are the way of the future.\n Bob invests $10,000 during the .com bubble peak and loses 38% in the next 3 years",
         title: "The Dot Com Bubble"
     },
     //can use x, y directly instead of data
@@ -203,7 +225,7 @@ async function init() {
     var annotations = [
     {
     note: {
-        label: "Bob invests $100 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
+        label: "Bob invests $250 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
         title: "The Great Depression"
     },
     //can use x, y directly instead of data
@@ -213,7 +235,7 @@ async function init() {
     },
     {
     note: {
-        label: "Bob invests another 5000 right before the 1987 flash crash. Only to lose another 14% in the following year",
+        label: "Bob invests $5,000 right before the 1987 flash crash. Only to lose another 14% in the following year",
         title: "1987 Flash Crash"
     },
     //can use x, y directly instead of data
@@ -222,7 +244,7 @@ async function init() {
     dx: -60},
     {
     note: {
-        label: "Bob feels computers are the way of the future.\n He invests another $5000 during the .com bubble peak and loses 38% in the next 3 years",
+        label: "Bob feels computers are the way of the future.\n Bob invests $10,000 during the .com bubble peak and loses 38% in the next 3 years",
         title: "The Dot Com Bubble"
     },
     //can use x, y directly instead of data
@@ -231,7 +253,7 @@ async function init() {
     dx: -150},
     {
     note: {
-        label: "Recovering from his .com loss he invests another $5000 at the peak of the housing bubble",
+        label: "Recovering from his .com loss Bob invests $10,000 at the peak of the housing bubble",
         title: "The Housing Crisis"
     },
     //can use x, y directly instead of data
@@ -243,7 +265,7 @@ async function init() {
         var annotations = [
         {
     note: {
-        label: "Bob invests 5000 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
+        label: "Bob invests $250 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
         title: "The Great Depression"
     },
     //can use x, y directly instead of data
@@ -253,7 +275,7 @@ async function init() {
     },
     {
     note: {
-        label: "Bob invests another 5000 right before the 1987 flash crash. Only to lose another 14% in the following year",
+        label: "Bob invests $5,000 right before the 1987 flash crash. Only to lose another 14% in the following year",
         title: "1987 Flash Crash"
     },
     //can use x, y directly instead of data
@@ -262,7 +284,7 @@ async function init() {
     dx: -60},
     {
     note: {
-        label: "Bob feels computers are the way of the future.\n He invests another $5000 during the .com bubble peak and loses 38% in the next 3 years",
+        label: "Bob feels computers are the way of the future.\n Bob invests $10,000 during the .com bubble peak and loses 38% in the next 3 years",
         title: "The Dot Com Bubble"
     },
     //can use x, y directly instead of data
@@ -271,7 +293,7 @@ async function init() {
     dx: -150},
     {
     note: {
-        label: "Recovering from his .com loss he invests another $5000 at the peak of the housing bubble",
+        label: "Recovering from his .com loss Bob invests $10,000 at the peak of the housing bubble",
         title: "The Housing Crisis"
     },
     //can use x, y directly instead of data
@@ -280,7 +302,7 @@ async function init() {
     dx: -30},
     {
     note: {
-        label: "Bob feels Covid is over and invests another $5000 at the end of 2021",
+        label: "Bob feels Covid is over and invests another $10,000 at the end of 2021",
         title: "Post-Covid Inflation bubble"
     },
     //can use x, y directly instead of data
