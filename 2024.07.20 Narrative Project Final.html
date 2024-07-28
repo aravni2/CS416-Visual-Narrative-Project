@@ -53,7 +53,7 @@ d3.select("svg").attr("height",window.innerHeight-100).attr("width",window.inner
 var gwidth = window.innerWidth-200 //scale for width of chart in pixels
 var gheight = window.innerHeight-200//scale for height of chart in pixels
 let margin = 50;
-var index = 50;
+var index = 1;
 var clickcount = 0
 
 const type = d3.annotationCalloutElbow;
@@ -78,7 +78,7 @@ async function init() {
     console.log(dataslice);
     //bind data load to scatter plots and scale radii to adjusted
     function createGraph(dataslice,data,index){
-    if (clickcount < 2){ slider.style("opacity",0);}
+    if (clickcount < 3){ slider.style("opacity",0);}
     else {slider.style("opacity",1);}
 
     d3.select('.chart')
@@ -150,6 +150,16 @@ async function init() {
     if (index >= 15) {
     var annotations = [
     {
+    note: {
+        label: "Although he has no money, he will soon scrape enough together to hit it big",
+        title: "Bob is Born"
+    },
+    //can use x, y directly instead of data
+    data: { Year: 1915, "snp_adj": 250},
+    dy: -60,
+    dx: 60
+    },
+    {
         note: {
         label: "Although he has no money, he will soon scrape enough together to hit it big",
         title: "Bob is Born"
@@ -161,7 +171,7 @@ async function init() {
     },
     {
     note: {
-        label: "Bob invests $250 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
+        label: "Bob invests his first $250 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
         title: "The Great Depression"
     },
     //can use x, y directly instead of data
@@ -174,7 +184,17 @@ async function init() {
     var annotations = [
     {
     note: {
-        label: "Bob invests $250 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
+        label: "Although he has no money, he will soon scrape enough together to hit it big",
+        title: "Bob is Born"
+    },
+    //can use x, y directly instead of data
+    data: { Year: 1915, "snp_adj": 250},
+    dy: -60,
+    dx: 60
+    },
+    {
+    note: {
+        label: "Bob invests his first $250 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
         title: "The Great Depression"
     },
     //can use x, y directly instead of data
@@ -195,7 +215,17 @@ async function init() {
     var annotations = [
     {
     note: {
-        label: "Bob invests $250 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
+        label: "Although he has no money, he will soon scrape enough together to hit it big",
+        title: "Bob is Born"
+    },
+    //can use x, y directly instead of data
+    data: { Year: 1915, "snp_adj": 250},
+    dy: -60,
+    dx: 60
+    },
+    {
+    note: {
+        label: "Bob invests his first $250 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
         title: "The Great Depression"
     },
     //can use x, y directly instead of data
@@ -225,7 +255,17 @@ async function init() {
     var annotations = [
     {
     note: {
-        label: "Bob invests $250 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
+        label: "Although he has no money, he will soon scrape enough together to hit it big",
+        title: "Bob is Born"
+    },
+    //can use x, y directly instead of data
+    data: { Year: 1915, "snp_adj": 250},
+    dy: -60,
+    dx: 60
+    },
+    {
+    note: {
+        label: "Bob invests his first $250 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
         title: "The Great Depression"
     },
     //can use x, y directly instead of data
@@ -265,7 +305,17 @@ async function init() {
         var annotations = [
         {
     note: {
-        label: "Bob invests $250 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
+        label: "Although he has no money, he will soon scrape enough together to hit it big",
+        title: "Bob is Born"
+    },
+    //can use x, y directly instead of data
+    data: { Year: 1915, "snp_adj": 250},
+    dy: -60,
+    dx: 60
+    },
+        {
+    note: {
+        label: "Bob invests his first $250 during the peak of the roaring twenties. Only to lose > 70% of his wealth in the coming Great depression",
         title: "The Great Depression"
     },
     //can use x, y directly instead of data
@@ -347,7 +397,8 @@ async function init() {
         .attr("x",50)
         .attr("y",50);
 
-  
+    var max_year = d3.max(dataslice,dataslice.Year)
+    console.log(max_year)
     // add text to infobox
     d3.select('.chart').append("g").attr("transform","translate("+100+","+100+")")
         .append("foreignObject")
@@ -357,9 +408,10 @@ async function init() {
         .style("font", "14px 'Helvetica Neue'")
         .data(dataslice)
         .html(function (d,i) {
-            
+            // Bob was born in 1915 and scraped together $100 to invest during the start of the great depression
             if (clickcount == 0 ) {
-                    return "Bob's Money: a cautionary tale<br> Bob was born in 1915 and scraped together $100 to invest during the start of the great depression"
+                    return "<font size = 7><u> Bob's Money</u><font/><br><a><font size= 3> This visual follows Bob and his investments, who lives an extroadinarly long life and continually invests in the market at the worst financial times in history<br><br>Nevertheless, he trusts in compounding interest and never withdrawls his money, he just lets it grow<font/><br>Year: "
+                        +d3.max(dataslice,d=>+d['Year'])+" Bob's Money:<strong> "+d3.max(dataslice,d=>+d['snp_adj']);
                     // "Year:" +dataslice[dataslice.length -1]['bobs_money_compounded']+ "<br>SP500 Average: <strong>" ;
             } else if (clickcount == 1 ) {
                     return "Year:" +d.Year+ "<br/>SP500 Average: <strong>"+d['snp_adj']+"<strong/><br> Change: <strong/><span style='color: red;'>"+d['snp_growth']+"%<br/><span style='color: black;'>Bobs Wealth: <span style='color: red;'>$"+d['bobs_money_compounded']  ;
