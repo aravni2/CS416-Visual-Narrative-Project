@@ -41,15 +41,15 @@
 
 <div id="textbox"></div>    
 <svg class="chart"></svg>
-<div id="sliderbar"></div>
+<!-- <div id="sliderbar"></div> -->
 <div id="tooltip"></div> 
-<button id="bt1" type="button">Click to Advance</button>
+<button id="bt1" type="button" onclick="">Click to Advance!!</button>
 <div id="sliderdiv"><input id="slider" type="range" min="1" max="109" step="1" value="109"/></div>
 <!-- <button id="bt1" type="button" onclick="createGraph(dataslice,data,index)">Click Me!</button> -->
-<!-- <div class="bobswealth"></div>  -->
+<div class="bobswealth"></div> 
 
 <script>
-d3.select("svg").attr("height",window.innerHeight-100).attr("width",window.innerWidth-100)
+d3.select("svg").attr("height",window.innerHeight-100).attr("width",window.innerWidth-100);
 var gwidth = window.innerWidth-200; //scale for width of chart in pixels
 var gheight = window.innerHeight-200;//scale for height of chart in pixels
 let margin = 50;
@@ -80,7 +80,7 @@ async function init() {
     //bind data load to scatter plots and scale radii to adjusted
     function createGraph(dataslice,data,index){
     if (clickcount < 3){ slider.style("opacity",0);}
-    else {slider.style("opacity",1);}
+    else {slider.style("opacity",1);};
     
 
     d3.select('.chart')
@@ -166,7 +166,7 @@ async function init() {
     {
     note: {
         
-        title: "Hover to view additional details"
+        title: "Hover on data points to view details"
     },
     //can use x, y directly instead of data
     data: { Year: 1915, "snp_adj": 250},
@@ -175,7 +175,7 @@ async function init() {
     disable: (['connector','subject','border']),
     color: "black",
     dy: -1,
-    dx: 200
+    dx: 250
     }]};
     if (index >= 15) {
     var annotations = [
@@ -210,7 +210,7 @@ async function init() {
     dy: -60,
     dx: 60
     }]
-    } 
+    }; 
     if (index > 73) {
     var annotations = [
     {
@@ -241,7 +241,7 @@ async function init() {
     //can use x, y directly instead of data
     data: { Year: 1987, "snp_adj": 769},
     dy: -60,
-    dx: -60}]}
+    dx: -60}]};
     if (index >= 86) {
     var annotations = [
     {
@@ -281,7 +281,7 @@ async function init() {
     //can use x, y directly instead of data
     data: { Year: 2000, "snp_adj": 2525},
     dy: -40,
-    dx: -150}]}
+    dx: -150}]};
     if (index >= 93) {
     var annotations = [
     {
@@ -331,7 +331,7 @@ async function init() {
     data: { Year: 2007, "snp_adj": 2170},
     dy: -120,
     dx: -30}]
-    }
+    };
     if (index >=107) {
         var annotations = [
         {
@@ -431,7 +431,7 @@ async function init() {
 
 
     var max_year = d3.max(dataslice,dataslice.Year);
-    console.log(max_year)
+    console.log(max_year);
     // add text to infobox
     d3.select('.chart').append("g").attr("transform","translate("+100+","+100+")")
         .append("foreignObject")
@@ -443,43 +443,27 @@ async function init() {
         .html(function (d,i) {
             // Bob was born in 1915 and scraped together $100 to invest during the start of the great depression
             if (clickcount == 0 ) {
-                    return "<font size = 7><u> Bob's Money</u><font/><br><a><font size= 3> This visual follows Bob and his investments, who lives an extroadinarly long life and continually invests in the market at the worst financial times in history<br><br>Nevertheless, he trusts in compounding interest and never withdrawls his money, he just lets it grow<font/><br><br><strong>End Year: "
-                        +d3.max(dataslice,d=>+d['Year'])+"<br>Bob's Total Wealth:  <strong><span style='color: green;'> $"+dataslice[dataslice.length -1]['bobs_money_compounded']+"<br><span style='color: black;'>Bob's Total Investment Growth: ";
+                    return "<font size = 7><u> Bob's Money</u><font/><br><a><font size= 3> This story follows Bob and his investments. He lives an extroadinarly long life and continually invests in the market at the worst financial times in history<br><br>Nevertheless, he trusts in compounding interest and never withdrawls his money, he just lets it grow.<font/><br><br><strong>End Year: "
+                        +d3.max(dataslice,d=>+d['Year'])+"<br>Bob's Total Wealth:  <strong><span style='color: green;'> $"+dataslice[dataslice.length -1]['bobs_money_compounded']+"<br><span style='color: black;'>Bob's Total Investment Growth: " +dataslice[dataslice.length -1]['bobs_total_growth']+ "%";
                     // "Year:" +dataslice[dataslice.length -1]['bobs_money_compounded']+ "<br>SP500 Average: <strong>" ;
             } else if (clickcount == 1 ) {
-                    return "<font size = 7><u> Bob's Money</u><font/><br><a><font size= 3> Bob learns from an early age the power of the markets, He invests $250 and lets it ride<br><br>Despite losing over 70% of his wealth in the great depression<font/><br><strong>Year: "
-                        +d3.max(dataslice,d=>+d['Year'])+"<br>Bob's Total Wealth:<strong><span style='color: green;'> $"+dataslice[dataslice.length -1]['bobs_money_compounded'];
+                    return "<font size = 7><u> Bob's Money</u><font/><br><a><font size= 3> Bob learns from an early age the power of the markets. He invests $250 and lets it ride<br><br>Despite losing over 70% of his wealth in the great depression, the following decades grow his nest egg into the $1000's<font/><br><br><strong>End Year: "
+                        +d3.max(dataslice,d=>+d['Year'])+"<br>Bob's Total Wealth:<strong><span style='color: green;'> $"+dataslice[dataslice.length -1]['bobs_money_compounded']+"<br><span style='color: black;'>Bob's Total Investment Growth: " +dataslice[dataslice.length -1]['bobs_total_growth']+ "%";
             } else if (clickcount == 2) {
-                    return "<font size = 7><u> Bob's Money</u><font/><br><a><font size= 3> Bob makes several larger investments in the coming decades: $5,000 during the flash crash, and $10,000 each during the dot com bubble and the housing crisis <br><br>Undetered, Bob continues to hold steady and his wealth has surpassed $600,000!!! <font/><br><br><strong>End Year: "
-                        +d3.max(dataslice,d=>+d['Year'])+"<br>Bob's Total Wealth:<strong><span style='color: green;'> $"+dataslice[dataslice.length -1]['bobs_money_compounded'];
+                    return "<font size = 7><u> Bob's Money</u><font/><br><a><font size= 3> Bob makes several larger investments in the coming decades: $5,000 during the flash crash, and $10,000 during the dot com bubble, and $10,000 in the housing bubble <br><br>Undetered, Bob continues to hold steady and his wealth has surpassed $600,000!!! <font/><br><br><strong>End Year: "
+                        +d3.max(dataslice,d=>+d['Year'])+"<br>Bob's Total Wealth:<strong><span style='color: green;'> $"+dataslice[dataslice.length -1]['bobs_money_compounded']+"<br><span style='color: black;'>Bob's Total Investment Growth: " +dataslice[dataslice.length -1]['bobs_total_growth']+ "%";
             }
             else if (clickcount > 2) {
                     return "<font size = 7><u> Bob's Money</u><font/><br><a><font size= 3> Bob makes one last $10,000 investment during the inflation bubble <br><br>While this is still ongoing and Bob may not know what comes next, he accrued almost $2 milllion and is confident he can weather any storm <font/><br><br><strong>End Year: "
-                        +d3.max(dataslice,d=>+d['Year'])+"<br>Bob's Money:<strong><span style='color: green;'> $"+dataslice[dataslice.length -1]['bobs_money_compounded'];
-            }
+                        +d3.max(dataslice,d=>+d['Year'])+"<br>Bob's Money:<strong><span style='color: green;'> $"+dataslice[dataslice.length -1]['bobs_money_compounded']+"<br><span style='color: black;'>Bob's Total Investment Growth: " +dataslice[dataslice.length -1]['bobs_total_growth']+ "%";
+            };
             });
-
 
 
 
     // d3.select('.bobswealth').append("text").html(function (d,i) {return "testing "+d3.max(dataslice,d=>+d['snp_adj']);})
 
-    // if (clickcount==0) {
-    //     d3.select('.chart')
-    //     .append("g").attr("transform","translate("+margin+","+margin+")").select("rect")
-    //     .attr("class", "hoverbox")
-    //     .data(dataslice).enter().append("rect")
-    //     .attr("height",100)
-    //     .attr("width",200)
-    //     .attr("x",200)
-    //     .attr("y",550)
-    //     .attr("fill","none");
-        
-    // }
-    // // if (clickcount>0){
-    // //     d3.select('.hoverbox').remove();
-    // // }
-}
+};
 
 
     // finish setting y axis
@@ -522,7 +506,7 @@ async function init() {
 
     
     // add button functionality
-    button.on("click", (d,i) => {
+    d3.select("#bt1").on("click", (d,i) => {
         index += 50;
         clickcount+=1;
         console.log(clickcount);
@@ -534,16 +518,16 @@ async function init() {
         // d3.select("path").remove();
         d3.select(".chart").select(".LineDraw").remove();
         d3.select(".bobswealth").html("");
-        d3.select(".hoverbox").html("")
+        // d3.select(".hoverbox").html("");
 
         createGraph(dataslice,data,index);
 
-    })
+    });
 
     
     d3.select("#slider").attr("width",gwidth).on("input", function(d,i) {
         index = this.value;
-        console.log(this.value)
+        console.log(this.value);
         // console.log(index)
         dataslice = data.slice(0, index);
         // console.log(dataslice)
@@ -558,20 +542,20 @@ async function init() {
     });
 
     // add graph updating
-    function updateGraph(newdata,data,index) {
-        var dat = d3.select(".chart")
-        .data(dataslice);
-        dat.exit().remove();
-        dat.enter()
-        .append("g")
-        .attr("class","dat")
-        .merge(dat)
+    // function updateGraph(newdata,data,index) {
+    //     var dat = d3.select(".chart")
+    //     .data(dataslice);
+    //     dat.exit().remove();
+    //     dat.enter()
+    //     .append("g")
+    //     .attr("class","dat")
+    //     .merge(dat);
 
-    }
+    // };
 
     createGraph(dataslice,data,index);
     
-}
+};
 </script>
 
 </body>
