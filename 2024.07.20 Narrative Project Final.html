@@ -80,8 +80,9 @@ async function init() {
     //bind data load to scatter plots and scale radii to adjusted
     function createGraph(dataslice,data,index){
     if (clickcount < 3){ slider.style("opacity",0);}
-    else {slider.style("opacity",1);};
+    else {slider.style("opacity",1);}
     
+  
 
     d3.select('.chart')
         .append('g').attr("transform","translate("+margin+","+margin+")") //start at canvas
@@ -108,6 +109,7 @@ async function init() {
                     return "Year:" +d.Year+ "<br/><strong>S&P500 Adj. Average: "+d['snp_adj']+"<strong/><br> Change: <strong/><span style='color: black;'>"+d['snp_growth']+"%<br/><span style='color: black;'>Bobs Wealth: <span style='color: black;'>$"+d['bobs_money_compounded'] ;
             }
     });
+    
         d3.select(this).attr("r",8);}
         )
       
