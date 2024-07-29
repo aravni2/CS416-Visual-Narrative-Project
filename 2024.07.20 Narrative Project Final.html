@@ -43,7 +43,7 @@
 <svg class="chart"></svg>
 <div id="sliderbar"></div>
 <div id="tooltip"></div> 
-<button id="bt1" type="button" onclick="">Click to Advance</button>
+<button id="bt1" type="button">Click to Advance</button>
 <div id="sliderdiv"><input id="slider" type="range" min="1" max="109" step="1" value="1"/></div>
 <!-- <button id="bt1" type="button" onclick="createGraph(dataslice,data,index)">Click Me!</button> -->
 <!-- <div class="bobswealth"></div>  -->
@@ -55,8 +55,9 @@ var gheight = window.innerHeight-200//scale for height of chart in pixels
 let margin = 50;
 var index = 1;
 var clickcount = 0
-
+var button = d3.select('#bt1');
 const type = d3.annotationCalloutElbow;
+
 //async function to first call data download before moving to next functions
 async function init() {
     const data = await d3.csv('https://raw.githubusercontent.com/aravni2/CS416-Visual-Narrative-Project/main/SP500%20DJIA%20and%20GDP%20Cleaned.csv'
@@ -80,6 +81,7 @@ async function init() {
     function createGraph(dataslice,data,index){
     if (clickcount < 3){ slider.style("opacity",0);}
     else {slider.style("opacity",1);}
+    
 
     d3.select('.chart')
         .append('g').attr("transform","translate("+margin+","+margin+")") //start at canvas
@@ -364,7 +366,7 @@ async function init() {
     
     // create variables for animations
     const makeAnnotations = d3.annotation()
-    .editMode(true)
+    .editMode(false)
     //also can set and override in the note.padding property
     //of the annotation object
     .notePadding(15)
@@ -468,22 +470,23 @@ async function init() {
         .style("font-size", "20px")
         .style("font-weight", "bold")
         .style("font-family", "sans-serif")
-        .text("SP500 Avg by year");
+        .text("S&P500 Avg by year (inflation Adjusted)");
 
     
     // add button functionality
-    d3.select("#bt1").on("click", (d,i) => {
+    button.on("click", (d,i) => {
         index += 50;
         clickcount+=1;
         console.log(clickcount)
         var dataslice = data.slice(0, index);
-        console.log(index);
-        console.log(dataslice);
+        // console.log(index);
+        // console.log(dataslice);
         d3.select(".annotations").remove();
         d3.select(".chart").selectAll("circle").remove();
         // d3.select("path").remove();
         d3.select(".chart").select(".LineDraw").remove();
         d3.select(".bobswealth").html("");
+
         createGraph(dataslice,data,index);
 
     })
@@ -492,9 +495,9 @@ async function init() {
     d3.select("#slider").attr("width",gwidth).on("input", function(d,i) {
         index = this.value;
         console.log(this.value)
-        console.log(index)
+        // console.log(index)
         dataslice = data.slice(0, index);
-        console.log(dataslice)
+        // console.log(dataslice)
         d3.select(".annotations").remove();
         d3.select(".chart").selectAll("circle").remove();
         // d3.select("path").remove();
@@ -519,6 +522,7 @@ async function init() {
     }
 
     createGraph(dataslice,data,index);
+    
 }
 </script>
 
